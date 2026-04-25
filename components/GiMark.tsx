@@ -6,14 +6,19 @@ interface Props {
 export function GiMark({ size = 28, accent = "#FF4D5E" }: Props) {
   const cell = size / 4;
   const grid = [
-    [1, 1, 1, 1],
-    [1, 1, 2, 1],
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
+    [2, 2, 2, 1],
+    [1, 1, 2, 2],
+    [2, 2, 2, 1],
+    [2, 1, 2, 1],
   ];
   const inset = 0.5;
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: "block" }}>
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      style={{ display: "block" }}
+    >
       {grid.map((row, y) =>
         row.map((v, x) =>
           v ? (
@@ -26,8 +31,8 @@ export function GiMark({ size = 28, accent = "#FF4D5E" }: Props) {
               fill={v === 2 ? accent : "#EDEEF3"}
               rx={0.5}
             />
-          ) : null
-        )
+          ) : null,
+        ),
       )}
     </svg>
   );
