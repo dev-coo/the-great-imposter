@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callGemini } from "@/lib/gemini-client";
+import { callGemini } from "@/lib/gemini/client";
 import { AnalyzeResponse } from "@/lib/types";
 
 export const runtime = "nodejs";

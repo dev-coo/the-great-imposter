@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseGeminiResponse } from "@/lib/gemini-client";
+import { parseGeminiResponse } from "@/lib/gemini/schema";
 
 describe("parseGeminiResponse", () => {
   it("accepts a valid response", () => {
