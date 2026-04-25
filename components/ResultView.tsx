@@ -26,7 +26,7 @@ export function ResultView({
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showMarkers, setShowMarkers] = useState(true);
+  const [showMarkers, setShowMarkers] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,6 +74,7 @@ export function ResultView({
         {showMarkers && points.map((pt, i) => (
           <div
             key={i}
+            title={pt.reason}
             style={{
               position: "absolute",
               left: `${pt.x * 100}%`,
@@ -83,7 +84,7 @@ export function ResultView({
               background: "var(--gi-red)",
               border: "1px solid rgba(255,255,255,0.4)",
               boxShadow: "0 0 0 3px rgba(255,77,94,0.25)",
-              pointerEvents: "none",
+              cursor: "help",
             }}
           />
         ))}
@@ -105,7 +106,7 @@ export function ResultView({
           className={`gi-chip ${showMarkers ? "gi-chip-cyan" : ""}`}
           style={{ cursor: "pointer", border: "1px solid var(--gi-line)" }}
         >
-          힌트 마커: {showMarkers ? "ON" : "OFF"}
+          정답 보기: {showMarkers ? "ON" : "OFF"}
         </button>
         <div className="gi-chip">난이도: {difficulty}</div>
         <div className="gi-chip" style={{ fontFamily: "var(--gi-font-mono)" }}>{estTime}</div>
@@ -226,6 +227,7 @@ export function ResultView({
         {showMarkers && points.map((pt, i) => (
           <div
             key={i}
+            title={pt.reason}
             style={{
               position: "absolute",
               left: `${pt.x * 100}%`,
@@ -235,7 +237,7 @@ export function ResultView({
               background: "var(--gi-red)",
               border: "1px solid rgba(255,255,255,0.4)",
               boxShadow: "0 0 0 3px rgba(255,77,94,0.25)",
-              pointerEvents: "none",
+              cursor: "help",
             }}
           />
         ))}
@@ -252,7 +254,7 @@ export function ResultView({
           className={`gi-chip ${showMarkers ? "gi-chip-cyan" : ""}`}
           style={{ cursor: "pointer", border: "1px solid var(--gi-line)" }}
         >
-          힌트 마커: {showMarkers ? "ON" : "OFF"}
+          정답 보기: {showMarkers ? "ON" : "OFF"}
         </button>
       </div>
 

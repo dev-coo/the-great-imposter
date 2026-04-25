@@ -12,7 +12,6 @@ interface Props {
 
 const CHECKLIST = [
   { ok: false, t: "복잡한 배경 (무늬·텍스처·잎)" },
-  { ok: true, t: "충분한 해상도 (≥ 400px)" },
   { ok: false, t: "적당한 명암 차이" },
 ];
 
@@ -45,10 +44,7 @@ export function RejectView({ imageDataUrl, reason, onReset, onRetryAnyway, wide 
       <div className="gi-chip" style={{ background: "rgba(255,180,84,0.1)", borderColor: "rgba(255,180,84,0.4)", color: "#FFD08A" }}>
         <AlertIcon size={12} /> 숨을 자리가 부족해요
       </div>
-      <div className="gi-display" style={{ fontSize: wide ? 38 : 28, color: "var(--gi-fg)", marginTop: 14, lineHeight: wide ? 1.1 : 1.15 }}>
-        이 사진은 너무<br />잘 보일 것 같아요
-      </div>
-      <div style={{ color: "var(--gi-fg-2)", fontSize: 14, marginTop: 10, lineHeight: 1.6 }}>
+      <div className="gi-display" style={{ fontSize: wide ? 28 : 22, color: "var(--gi-fg)", marginTop: 14, lineHeight: 1.4 }}>
         {reason}
       </div>
 
@@ -108,10 +104,7 @@ export function RejectView({ imageDataUrl, reason, onReset, onRetryAnyway, wide 
         <div className="gi-chip" style={{ background: "rgba(255,180,84,0.1)", borderColor: "rgba(255,180,84,0.4)", color: "#FFD08A" }}>
           <AlertIcon size={12} /> 숨을 자리가 부족해요
         </div>
-        <div className="gi-display" style={{ fontSize: 28, color: "var(--gi-fg)", marginTop: 14, lineHeight: 1.15 }}>
-          이 사진은<br />너무 잘 보일 것 같아요
-        </div>
-        <div style={{ color: "var(--gi-fg-2)", fontSize: 14, marginTop: 8, lineHeight: 1.6 }}>
+        <div className="gi-display" style={{ fontSize: 20, color: "var(--gi-fg)", marginTop: 14, lineHeight: 1.4 }}>
           {reason}
         </div>
       </div>

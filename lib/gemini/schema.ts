@@ -39,7 +39,7 @@ export function parseGeminiResponse(raw: unknown): AnalyzeResponse {
   const imposterCount =
     typeof r.imposterCount === "number" ? Math.floor(r.imposterCount) : 0;
 
-  if (Number.isNaN(fitness) || fitness < 0.4 || imposterCount <= 0) {
+  if (Number.isNaN(fitness) || fitness < 0.15 || imposterCount <= 0) {
     return {
       ok: false,
       reason:

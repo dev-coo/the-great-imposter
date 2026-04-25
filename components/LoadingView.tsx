@@ -14,10 +14,10 @@ const STEPS = [
 ];
 
 const MONOLOGUES = [
-  "잎사귀 사이가 잘 숨겨질 것 같아요…",
-  "그림자 아래가 딱이네요…",
-  "여기 무늬가 복잡해서 눈에 안 띌 거예요…",
-  "이 자리가 제일 자연스러울 것 같아요…",
+  "조용히 잠입 중…",
+  "Sus한 자리 물색 중…",
+  "환풍구 통과… 발소리 죽이고…",
+  "Crewmate인 척 연기 시작…",
 ];
 
 export function LoadingView({ imageDataUrl, wide }: Props) {
