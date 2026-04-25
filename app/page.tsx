@@ -258,7 +258,7 @@ export default function Home() {
     <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
       <PixelBg />
       <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <TopBar wide={state.kind === "idle"} />
+        <TopBar />
 
         {/* Mobile layout */}
         <div className="block lg:hidden" style={{ flex: 1 }}>

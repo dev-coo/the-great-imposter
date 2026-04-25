@@ -1,17 +1,10 @@
 import { GiMark } from "./GiMark";
 
-interface Props {
-  wide?: boolean;
-}
-
-export function TopBar({ wide = false }: Props) {
+export function TopBar() {
   return (
     <div
+      className="flex items-center justify-between px-5 py-4 lg:px-8 lg:py-5"
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: wide ? "20px 32px" : "16px 20px",
         borderBottom: "1px solid var(--gi-line)",
         position: "relative",
         zIndex: 2,
@@ -19,7 +12,7 @@ export function TopBar({ wide = false }: Props) {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <GiMark size={24} />
-        <div className="gi-display" style={{ fontSize: wide ? 18 : 16, color: "var(--gi-fg)" }}>
+        <div className="gi-display text-base lg:text-lg" style={{ color: "var(--gi-fg)" }}>
           The Great Imposter
         </div>
       </div>
