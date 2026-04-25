@@ -109,12 +109,6 @@ export function ResultView({
             }}
           />
         ))}
-        <div style={{ position: "absolute", top: 12, left: 12 }}>
-          <div className="gi-chip" style={{ background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)" }}>
-            <SparkIcon size={12} />
-            합성 결과
-          </div>
-        </div>
         <button
           onClick={handleZoom}
           aria-label="확대"
@@ -129,11 +123,6 @@ export function ResultView({
         >
           <ExpandIcon size={16} />
         </button>
-        <div style={{ position: "absolute", bottom: 12, right: 12 }}>
-          <div className="gi-chip" style={{ background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)", fontFamily: "var(--gi-font-mono)" }}>
-            {imageWidth}×{imageHeight} · PNG
-          </div>
-        </div>
       </div>
       <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
         <button
@@ -233,23 +222,24 @@ export function ResultView({
       onClick={() => setZoomImg(null)}
       style={{
         position: "fixed", inset: 0, zIndex: 100,
-        background: "rgba(7,9,26,0.92)",
+        background: "rgba(7,9,26,0.94)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        padding: 20, cursor: "zoom-out",
+        cursor: "zoom-out",
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
           position: "relative",
-          maxWidth: "95vw", maxHeight: "95vh",
+          width: `min(96vw, ${(96 * (imageWidth / imageHeight)).toFixed(2)}vh)`,
+          aspectRatio: `${imageWidth} / ${imageHeight}`,
           cursor: "default",
         }}
       >
         <img
           src={zoomImg}
           alt="확대된 결과"
-          style={{ display: "block", maxWidth: "95vw", maxHeight: "95vh", borderRadius: 8 }}
+          style={{ display: "block", width: "100%", height: "100%", borderRadius: 8 }}
         />
         {showMarkers && points.map((pt, i) => (
           <div
@@ -272,9 +262,10 @@ export function ResultView({
           onClick={() => setZoomImg(null)}
           aria-label="닫기"
           style={{
-            position: "absolute", top: -14, right: -14,
+            position: "absolute", top: 12, right: 12,
             width: 38, height: 38, borderRadius: 19,
-            background: "var(--gi-bg-2)", border: "1px solid var(--gi-line)",
+            background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)",
+            border: "1px solid var(--gi-line)",
             color: "var(--gi-fg)", display: "flex", alignItems: "center", justifyContent: "center",
             cursor: "pointer",
           }}
@@ -351,11 +342,6 @@ export function ResultView({
         >
           <ExpandIcon size={15} />
         </button>
-        <div style={{ position: "absolute", bottom: 10, right: 10 }}>
-          <div className="gi-chip" style={{ background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)" }}>
-            {imageWidth}×{imageHeight}
-          </div>
-        </div>
       </div>
 
       <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
