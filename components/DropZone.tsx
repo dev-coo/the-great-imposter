@@ -5,7 +5,6 @@ import { UploadIcon, ImageIcon, CloseIcon } from "./Icons";
 
 const ALLOWED_MIME = ["image/png", "image/jpeg", "image/webp"];
 const MAX_BYTES = 10 * 1024 * 1024;
-const MIN_WIDTH = 400;
 
 interface FileInfo {
   file: File;
@@ -40,10 +39,6 @@ export function DropZone({ onFileSelected }: Props) {
         const dataUrl = reader.result as string;
         const img = new Image();
         img.onload = () => {
-          if (img.naturalWidth < MIN_WIDTH) {
-            setError(`이미지 가로가 ${MIN_WIDTH}px 이상이어야 해요.`);
-            return;
-          }
           setSelected({ file, dataUrl, width: img.naturalWidth, height: img.naturalHeight });
         };
         img.onerror = () => setError("이미지를 읽을 수 없어요.");
