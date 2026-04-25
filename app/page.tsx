@@ -9,7 +9,6 @@ import { ResultView } from "@/components/ResultView";
 import { RejectView } from "@/components/RejectView";
 import { ErrorView } from "@/components/ErrorView";
 import { AnalyzeResponse, ImposterPoint } from "@/lib/types";
-import { UploadIcon, ImageIcon } from "@/components/Icons";
 
 type State =
   | { kind: "idle" }
@@ -193,8 +192,7 @@ export default function Home() {
     </div>
   );
 
-  // Active state content (loading/result/reject/error) — same for mobile, wrapped in card for desktop
-  const activeContent = () => {
+  const mobileContent = () => {
     switch (state.kind) {
       case "loading":
         return <LoadingView imageDataUrl={state.imageDataUrl} />;
@@ -224,14 +222,43 @@ export default function Home() {
     }
   };
 
-  const isActive = state.kind !== "idle";
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  const desktopContent = () => {
+    switch (state.kind) {
+      case "loading":
+        return <LoadingView imageDataUrl={state.imageDataUrl} wide />;
+      case "result":
+        return (
+          <ResultView
+            imageDataUrl={state.imageDataUrl}
+            imageWidth={state.width}
+            imageHeight={state.height}
+            points={state.points}
+            fitnessReason={state.fitnessReason}
+            onReset={reset}
+            wide
+          />
+        );
+      case "reject":
+        return (
+          <RejectView
+            imageDataUrl={state.imageDataUrl}
+            reason={state.reason}
+            onReset={reset}
+            wide
+          />
+        );
+      case "error":
+        return <ErrorView onRetry={retry} onReset={reset} wide />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
       <PixelBg />
       <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <TopBar wide={isActive ? false : undefined} />
+        <TopBar wide={state.kind === "idle"} />
 
         {/* Mobile layout */}
         <div className="block lg:hidden" style={{ flex: 1 }}>
@@ -239,7 +266,7 @@ export default function Home() {
             idleMobileContent
           ) : (
             <div style={{ padding: "20px 20px 32px" }}>
-              {activeContent()}
+              {mobileContent()}
             </div>
           )}
         </div>
@@ -249,10 +276,8 @@ export default function Home() {
           {state.kind === "idle" ? (
             idleDesktopContent
           ) : (
-            <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 56px" }}>
-              <div className="gi-card" style={{ width: "100%", maxWidth: 880, padding: 28 }}>
-                {activeContent()}
-              </div>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 48px 40px" }}>
+              {desktopContent()}
             </div>
           )}
         </div>
