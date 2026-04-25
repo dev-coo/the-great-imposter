@@ -38,6 +38,15 @@ yarn-error.log*
 gcp-key.json
 *.gcp.json
 
+# Claude Code local state
+.claude/
+
+# scratch / personal
+test-*.mjs
+*.zip
+KakaoTalk_Photo_*.webp
+/ㅇㅇ
+
 # vercel
 .vercel
 
