@@ -55,9 +55,12 @@ export async function callGemini(
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: RESPONSE_SCHEMA,
+      thinkingConfig: { thinkingBudget: 0 },
     },
   };
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 25_000);
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -66,6 +69,7 @@ export async function callGemini(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
+      signal: controller.signal,
     });
     if (!res.ok) {
       const errText = await res.text();
@@ -81,7 +85,12 @@ export async function callGemini(
     const parsed = JSON.parse(text);
     return parseGeminiResponse(parsed);
   } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      return { ok: false, reason: "AI 응답이 25초 안에 오지 않았어요. 다시 시도해 주세요." };
+    }
     const msg = err instanceof Error ? err.message : "알 수 없는 오류";
     return { ok: false, reason: `Vertex AI 호출 실패: ${msg}` };
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
