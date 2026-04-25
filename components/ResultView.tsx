@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ImposterPoint } from "@/lib/types";
 import { renderImposters } from "@/lib/canvas-render";
-import { DownloadIcon, RefreshIcon, SparkIcon, ShareIcon } from "./Icons";
+import { DownloadIcon, RefreshIcon, SparkIcon, ShareIcon, ExpandIcon, CloseIcon } from "./Icons";
 
 interface Props {
   imageDataUrl: string;
@@ -27,6 +27,27 @@ export function ResultView({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [showMarkers, setShowMarkers] = useState(false);
+  const [zoomImg, setZoomImg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!zoomImg) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomImg(null);
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [zoomImg]);
+
+  const handleZoom = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    setZoomImg(canvas.toDataURL("image/png"));
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,6 +115,20 @@ export function ResultView({
             합성 결과
           </div>
         </div>
+        <button
+          onClick={handleZoom}
+          aria-label="확대"
+          style={{
+            position: "absolute", top: 12, right: 12,
+            width: 34, height: 34, borderRadius: 8,
+            background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)",
+            border: "1px solid var(--gi-line)", color: "var(--gi-fg)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer",
+          }}
+        >
+          <ExpandIcon size={16} />
+        </button>
         <div style={{ position: "absolute", bottom: 12, right: 12 }}>
           <div className="gi-chip" style={{ background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)", fontFamily: "var(--gi-font-mono)" }}>
             {imageWidth}×{imageHeight} · PNG
@@ -193,17 +228,78 @@ export function ResultView({
     </div>
   );
 
+  const zoomModal = zoomImg ? (
+    <div
+      onClick={() => setZoomImg(null)}
+      style={{
+        position: "fixed", inset: 0, zIndex: 100,
+        background: "rgba(7,9,26,0.92)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 20, cursor: "zoom-out",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          maxWidth: "95vw", maxHeight: "95vh",
+          cursor: "default",
+        }}
+      >
+        <img
+          src={zoomImg}
+          alt="확대된 결과"
+          style={{ display: "block", maxWidth: "95vw", maxHeight: "95vh", borderRadius: 8 }}
+        />
+        {showMarkers && points.map((pt, i) => (
+          <div
+            key={i}
+            title={pt.reason}
+            style={{
+              position: "absolute",
+              left: `${pt.x * 100}%`,
+              top: `${pt.y * 100}%`,
+              transform: "translate(-50%, -50%)",
+              width: 18, height: 18,
+              background: "var(--gi-red)",
+              border: "2px solid rgba(255,255,255,0.5)",
+              boxShadow: "0 0 0 4px rgba(255,77,94,0.3)",
+              cursor: "help",
+            }}
+          />
+        ))}
+        <button
+          onClick={() => setZoomImg(null)}
+          aria-label="닫기"
+          style={{
+            position: "absolute", top: -14, right: -14,
+            width: 38, height: 38, borderRadius: 19,
+            background: "var(--gi-bg-2)", border: "1px solid var(--gi-line)",
+            color: "var(--gi-fg)", display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer",
+          }}
+        >
+          <CloseIcon size={18} />
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   if (wide) {
     return (
-      <div className="gi-card" style={{ width: 1080, maxWidth: "100%", padding: 28, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 28 }}>
-        {imagePanel}
-        {infoPanel}
-      </div>
+      <>
+        <div className="gi-card" style={{ width: 1080, maxWidth: "100%", padding: 28, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 28 }}>
+          {imagePanel}
+          {infoPanel}
+        </div>
+        {zoomModal}
+      </>
     );
   }
 
   // Mobile — vertical stack
   return (
+    <>
     <div style={{ width: "100%" }}>
       <div style={{ marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
@@ -241,6 +337,20 @@ export function ResultView({
             }}
           />
         ))}
+        <button
+          onClick={handleZoom}
+          aria-label="확대"
+          style={{
+            position: "absolute", top: 10, right: 10,
+            width: 32, height: 32, borderRadius: 8,
+            background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)",
+            border: "1px solid var(--gi-line)", color: "var(--gi-fg)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer",
+          }}
+        >
+          <ExpandIcon size={15} />
+        </button>
         <div style={{ position: "absolute", bottom: 10, right: 10 }}>
           <div className="gi-chip" style={{ background: "rgba(7,9,26,0.7)", backdropFilter: "blur(4px)" }}>
             {imageWidth}×{imageHeight}
@@ -318,5 +428,7 @@ export function ResultView({
         <ShareIcon size={14} />
       </div>
     </div>
+    {zoomModal}
+    </>
   );
 }
