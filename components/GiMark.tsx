@@ -8,7 +8,7 @@ export function GiMark({ size = 28, accent = "#FF4D5E" }: Props) {
   const grid = [
     [2, 2, 2, 1],
     [1, 1, 2, 2],
-    [2, 2, 2, 1],
+    [2, 2, 2, 2],
     [2, 1, 2, 1],
   ];
   const inset = 0.5;
