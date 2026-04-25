@@ -8,7 +8,9 @@ const MODEL = "gemini-2.5-flash";
 let cachedAuth: GoogleAuth | null = null;
 function getAuth(): GoogleAuth {
   if (!cachedAuth) {
+    const inlineJson = process.env.GCP_CREDENTIALS_JSON;
     cachedAuth = new GoogleAuth({
+      credentials: inlineJson ? JSON.parse(inlineJson) : undefined,
       scopes: ["https://www.googleapis.com/auth/cloud-platform"],
     });
   }
@@ -24,8 +26,8 @@ export async function callGemini(
   if (!projectId) {
     return { ok: false, reason: "서버 설정 오류: GCP_PROJECT_ID 누락" };
   }
-  if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    return { ok: false, reason: "서버 설정 오류: GOOGLE_APPLICATION_CREDENTIALS 누락" };
+  if (!process.env.GCP_CREDENTIALS_JSON && !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    return { ok: false, reason: "서버 설정 오류: GCP_CREDENTIALS_JSON 또는 GOOGLE_APPLICATION_CREDENTIALS 필요" };
   }
 
   const url = `https://${location}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${location}/publishers/google/models/${MODEL}:generateContent`;
